@@ -18,7 +18,7 @@ interface page {
 export default function page({ }: page) {
     const [currentUser, setCurrentUser] = useState<any>(null);
     const [drinks, setDrinks] = useState<any>([]);
-    const [search, setSearch] = useState<string>('wayfinder');
+    const [search, setSearch] = useState<string>('');
     const [secretMenu, setSecretMenu] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -56,7 +56,12 @@ export default function page({ }: page) {
             filteredDrinks = filteredDrinks.filter(drink => drink.current && !drink.onMenu);
         }
 
-        return filteredDrinks.filter(drink => drink.current);
+        const currentDrinks = filteredDrinks.filter(drink => drink.current)
+        const withImages = currentDrinks.filter(drink => drink.image);
+        const withoutImages = currentDrinks.filter(drink => !drink.image);
+
+
+        return [...withImages, ...withoutImages]
     }
 
 
@@ -76,18 +81,18 @@ export default function page({ }: page) {
                 getFilteredDrinks()
                     .map((drink: any) => (
                         <div key={drink.drinkId} className='card-gradient text-white w-full rounded-xl p-5 py-3 flex justify-between'>
-                            <div className='flex justify-center items-center gap-4 relative'>
+                            <div className='flex justify-center items-center gap-0 relative'>
                                 {
                                     drink.image && (<>
-                                        <Image src={drink.image} alt='cocktail' height={50} width={50} className='w-7 object-contain relative z-10 bottom-0.5' />
-                                        <Image src={square} alt='cocktail' height={50} width={50} className='w-10 object-contain absolute left-[-6px] top-1.5' />
+                                        <Image src={drink.image} alt='cocktail' height={50} width={50} className={`h-16 object-contain relative z-10 bottom-0.5 ${drink.drinkId === 91 ? 'left-[-15px]' : 'left-[-9px]'} `} />
+                                        <Image src={square} alt='cocktail' height={50} width={50} className='w-12 object-contain absolute left-[-6px] top-1.5' />
                                     </>
                                     )
                                 }
 
                                 <div>
-                                    <p className='font-bold mb-0.5'>{drink.name}</p>
-                                    <p className='text-sm'>{`$${drink.price}.00`}</p>
+                                    <p className='font-bold mb-1'>{drink.name}</p>
+                                    <p className='text-sm text-neutral-300'>{`$${drink.price}.00`}</p>
                                 </div>
                             </div>
                             <PiCheers size={20} color='#fff' />
