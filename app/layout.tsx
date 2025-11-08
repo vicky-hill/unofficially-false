@@ -9,13 +9,21 @@ const figtree = Figtree({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-export const metadata: Metadata = {
+export const metadata: any = {
   themeColor: '#24242c',
+
+  // Safari iOS-specific PWA appearance
   appleWebApp: {
-    statusBarStyle: 'black-translucent',
+    capable: true,
+    statusBarStyle: 'black-translucent', // can be 'default', 'black', or 'black-translucent'
+    title: 'My App',
+  },
+
+  // Sometimes helps Safari interpret correctly
+  viewport: {
+    themeColor: '#24242c',
   },
 };
-
 export default function RootLayout({ children }: any) {
   return (
     <html lang="en">
