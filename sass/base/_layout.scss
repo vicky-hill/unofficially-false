@@ -1,0 +1,47 @@
+.container {
+    width: 100% !important;
+    margin: 1rem auto !important;
+    padding: 15px;
+    max-width: 1520px !important;
+
+    &.center {
+        text-align: center;
+    }
+}
+
+.content {
+    margin: 35px auto;
+
+    &--narrow {
+        max-width: 1000px !important;
+    }
+
+    &--extra-narrow {
+        max-width: 400px !important;
+    }
+
+    &--fit-screen {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        min-height: calc(100vh - 120px);
+        min-height: calc(100vh - 76px - 2.8rem - 65px - 10rem);
+    }   
+}
+
+.space {
+    background-color: transparent;
+
+    &.sm {
+        height: 5rem;
+    }
+   
+    &.md {
+        height: 10rem;
+    }
+
+    &.lg {
+        height: 15rem;
+    }
+}
