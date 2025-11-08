@@ -11,6 +11,9 @@ const figtree = Figtree({
 export default function RootLayout({ children }: any) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#24242c" />
+      </head>
       <body className={`${figtree.variable} antialiased page-gradient`}>
         {children}
       </body>
