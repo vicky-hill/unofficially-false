@@ -11,15 +11,14 @@ const figtree = Figtree({
 
 export const metadata: Metadata = {
   themeColor: '#24242c',
-}
+  appleWebApp: {
+    statusBarStyle: 'black-translucent',
+  },
+};
 
 export default function RootLayout({ children }: any) {
   return (
     <html lang="en">
-      <head>
-        <meta name="theme-color" content="#24242c" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      </head>
       <body className={`${figtree.variable} antialiased page-gradient`}>
         {children}
       </body>
