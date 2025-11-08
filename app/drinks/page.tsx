@@ -38,7 +38,7 @@ export default function page({ }: page) {
 
     if (!currentUser && loading) return (
         <div className='flex h-[90vh] justify-center items-center'>
-            loading
+            
         </div>
     )
 
