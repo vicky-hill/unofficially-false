@@ -56,12 +56,9 @@ export default function page({ }: page) {
             filteredDrinks = filteredDrinks.filter(drink => drink.current && !drink.onMenu);
         }
 
-        const currentDrinks = filteredDrinks.filter(drink => drink.current)
-        const withImages = currentDrinks.filter(drink => drink.image);
-        const withoutImages = currentDrinks.filter(drink => !drink.image);
-
-
-        return [...withImages, ...withoutImages]
+        return filteredDrinks
+            .filter(drink => drink.current && drink.sort)
+            .sort((a: any, b: any) => a.sort - b.sort);
     }
 
 
