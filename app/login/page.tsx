@@ -6,6 +6,7 @@ import FormikInput from '@/components/form/FormikInput'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/utils/firebase'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from 'antd'
 
 const validation = Yup.object().shape({
@@ -47,7 +48,7 @@ export default function Login({ }) {
 
     return (
         <div className='flex flex-col justify-center items-center h-[90vh]'>
-            <h1 className='mb-10'>Login</h1>
+            <h1 className='mb-10 text-neutral-50 text-3xl font-bold'>Login</h1>
 
             <Formik
                 initialValues={initialValues}
@@ -55,13 +56,17 @@ export default function Login({ }) {
                 validationSchema={validation}
             >
                 {({ isSubmitting }) => (
-                    <Form className="space-y-6 w-56">
+                    <Form className="space-y-6 w-[75%]">
                         <FormikInput name="email" />
-                        <FormikInput name="password" />
-                        <Button htmlType='submit' className='w-full mt-5'>Login</Button>
+                        <FormikInput type="password" name="password" />
+                        <Button htmlType='submit' className='w-full mt-5 bg-[#363642]! text-neutral-50! hover:bg-[#42424e]! border-[#42424e]!'>Login</Button>
                     </Form>
                 )}
             </Formik>
+            
+            <p className='text-neutral-400 text-sm mt-4'>
+                Don't have an account? <Link href='/signup' className='text-neutral-50 hover:text-neutral-200'>Sign up</Link>
+            </p>
         </div>
     )
 }

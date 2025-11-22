@@ -40,8 +40,8 @@ interface Input {
     autoComplete?: any
 }
 
-const activeClasses = 'active:border-neutral-600 active:outline-0 focus:border-neutral-600 focus:outline-0'
-const defaultClasses = `placeholder:text-neutral-500 outline-neutral-600 border border-[#eaeaf5] ${activeClasses}`
+const activeClasses = 'active:border-neutral-500 active:outline-0 focus:border-neutral-500 focus:outline-0'
+const defaultClasses = `placeholder:text-neutral-500 outline-neutral-500 border border-neutral-700 ${activeClasses}`
 const noBorder = `border-none ${activeClasses}`
 
 const errorClasses = 'outline-red border border-red'
@@ -74,7 +74,7 @@ export default function FormikInput({ border, name = '', label, noLabel, require
 
     const hasError = (name && touched && name in touched && errors && name in errors) || error || isNestedError();
 
-    const inputClasses = classNames(className + ' peer block block w-full bg-neutral-100 text-sm p-[10px] placeholder:text-neutral-500', {
+    const inputClasses = classNames(className + ' peer block block w-full bg-[#2a2a32] text-neutral-50 text-sm p-[10px] placeholder:text-neutral-500', {
         [defaultClasses]: !border && !hasError && !disabled,
         [noBorder]: border === 'none' && !hasError && !disabled,
         [errorClasses]: hasError,
@@ -210,7 +210,7 @@ export default function FormikInput({ border, name = '', label, noLabel, require
     return (
         <div className={className}>
             {!noLabel && !floatingLabel && (
-                <label htmlFor={name} className='text-[#273443] font-600 text-sm block pb-2 pl-1'>
+                <label htmlFor={name} className='text-neutral-200 font-600 text-sm block pb-2 pl-1'>
                     {label ? label : capitalize(name)}
                     {required && <b className='text-red text-xs ml-1.5'>*</b>}
                 </label>

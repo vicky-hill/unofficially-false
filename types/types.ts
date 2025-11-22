@@ -1,0 +1,1 @@
+export type DrinkType =  'cocktail' | 'bowl' | 'neat'

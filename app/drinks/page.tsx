@@ -1,101 +1,73 @@
 'use client'
 
-import api from '@/utils/api'
 import { useEffect, useState } from 'react'
 import logo from '@/images/logo.png'
 import Image from 'next/image'
-import { PiCheers } from "react-icons/pi"
 import Input from '@/components/form/Input'
 import { IoSearch } from "react-icons/io5"
 import { GiSecretBook } from "react-icons/gi"
+import { FaCocktail } from "react-icons/fa"
+import { GiFlamer } from "react-icons/gi"
+import Protect from '@/components/layout/Protect'
+import { useSettings } from '@/redux/slices/settings.slice'
+import DrinkItem from '@/components/drinks/DrinkItem'
+import DrinkDetails from '@/components/drinks/DrinkDetails'
+import { Drink } from '@/types/drink.types'
+import { useAppDispatch } from '@/redux/hooks'
+import { clearFilters, getDrinks, setFilter, setSearch, useDrinks } from '@/redux/slices/drinks.slice'
 
-const square = 'https://ik.imagekit.io/minite/falseidol/square.png';
+export default function page() {
+    const dispatch = useAppDispatch()
+    const { filteredDrinks, search, filter, drinks } = useDrinks()
 
-interface page {
-
-}
-
-export default function page({ }: page) {
-    const [currentUser, setCurrentUser] = useState<any>(null);
-    const [drinks, setDrinks] = useState<any>([]);
-    const [search, setSearch] = useState<string>('');
-    const [secretMenu, setSecretMenu] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const { logoOn } = useSettings();
+    const [selectedDrink, setSelectedDrink] = useState<Drink | null>(null);
 
     useEffect(() => {
-        getCurrentUser();
-        getAllDrinks();
+        dispatch(getDrinks())
     }, [])
 
-    const getCurrentUser = async () => {
-        setLoading(true);
-        const user = await api.get('/users/current');
-        setCurrentUser(user);
-        setLoading(false);
+    const handleFilter = (value: 'secretMenu' | 'bowl' | 'happyHour') => {
+        filter === value ? dispatch(clearFilters()) : dispatch(setFilter(value))
     }
-
-    const getAllDrinks = async () => {
-        const drinks = await api.get('/drinks?type=cocktail');
-        setDrinks(drinks);
-    }
-
-    if (!currentUser && loading) return (
-        <div className='flex h-[90vh] justify-center items-center'>
-
-        </div>
-    )
-
-    const getFilteredDrinks = () => {
-        let filteredDrinks = [...drinks];
-
-        if (search) {
-            filteredDrinks = filteredDrinks.filter(drink => JSON.stringify(drink).toLocaleLowerCase().includes(search.toLocaleLowerCase()));
-        }
-
-        if (secretMenu) {
-            filteredDrinks = filteredDrinks.filter(drink => drink.current && !drink.onMenu);
-        }
-
-        return filteredDrinks
-            .filter(drink => drink.current && drink.sort)
-            .sort((a: any, b: any) => a.sort - b.sort);
-    }
-
 
     return (
-        <div className='flex flex-col h-[95vh] items-center overflow-scroll gap-3 mt-5 px-4'>
-            <Image src={logo} alt='logo' className='mb-5 w-1/2' />
-            <div className='relative w-full'>
-                <Input onChange={(e: any) => setSearch(e.target.value)} className='mb-3 pl-9' />
-                <IoSearch className='absolute top-[11px] left-2' size={18} color='#55556d' />
-            </div>
-            <div onClick={() => setSecretMenu(isSecret => !isSecret)} className={`flex items-center justify-center-center ${secretMenu ? 'text-neutral-50' : 'text-neutral-500'} transition-all text-sm gap-1.5 font-bold w-full px-3 mb-3`}>
-                <GiSecretBook color={secretMenu ? '#fafafa' : '#737373'} size={16} />
-                <span>Secret Menu</span>
-            </div>
+        <Protect>
+            <div className='flex flex-col h-[95vh] items-center overflow-scroll gap-3 mt-5 px-4'>
+                {logoOn && <Image src={logo} alt='logo' className='mb-5 w-1/2' />}
 
-            {
-                getFilteredDrinks()
-                    .map((drink: any) => (
-                        <div key={drink.drinkId} className='card-gradient text-white w-full rounded-xl p-5 py-3 flex justify-between'>
-                            <div className='flex justify-center items-center gap-0 relative'>
-                                {
-                                    drink.image && (<>
-                                        <Image src={drink.image} alt='cocktail' height={50} width={50} className={`h-16 object-contain relative z-10 bottom-0.5 ${drink.drinkId === 91 ? 'left-[-15px]' : 'left-[-9px]'} `} />
-                                        <Image src={square} alt='cocktail' height={50} width={50} className='w-12 object-contain absolute left-[-6px] top-1.5' />
-                                    </>
-                                    )
-                                }
+                <div className={`relative w-full ${!logoOn ? 'mt-5' : ''}`}>
+                    <Input value={search} onChange={(e: any) => dispatch(setSearch(e.target.value))} className='mb-3 pl-9' />
+                    <IoSearch className='absolute top-[11px] left-2' size={18} color='#55556d' />
+                </div>
+                <div className='w-full flex justify-between'>
+                    <div onClick={() => handleFilter('secretMenu')} className={`flex items-center justify-center-center ${filter === 'secretMenu' ? 'text-neutral-50' : 'text-neutral-500'} transition-all text-sm gap-1.5 font-bold px-3 mb-3 w-min`}>
+                        <GiSecretBook color={filter === 'secretMenu' ? '#fafafa' : '#737373'} size={16} />
+                        <span className='w-max'>Secret Menu</span>
+                    </div>
+                    <div onClick={() => handleFilter('bowl')} className={`flex items-center justify-center-center ${filter === 'bowl' ? 'text-neutral-50' : 'text-neutral-500'} transition-all text-sm gap-1.5 font-bold px-3 mb-3 w-min`}>
+                        <GiFlamer color={filter === 'bowl' ? '#fafafa' : '#737373'} size={16} />
+                        <span className='w-max'>Bowls</span>
+                    </div>
+                    <div onClick={() => handleFilter('happyHour')} className={`flex items-center justify-center-center ${filter === 'happyHour' ? 'text-neutral-50' : 'text-neutral-500'} transition-all text-sm gap-1.5 font-bold px-3 mb-3 w-min`}>
+                        <FaCocktail color={filter === 'happyHour' ? '#fafafa' : '#737373'} size={16} />
+                        <span className='w-max'>Happy Hour</span>
+                    </div>
+                </div>
 
-                                <div>
-                                    <p className='font-bold mb-1'>{drink.name}</p>
-                                    <p className='text-sm text-neutral-300'>{`$${drink.price}.00`}</p>
-                                </div>
-                            </div>
-                            <PiCheers size={20} color='#fff' />
-                        </div>
-                    ))
-            }
-        </div>
+                {
+                    filteredDrinks
+                        .map((drink: Drink) => (
+                            <DrinkItem key={drink.drinkId} drink={drink} onOpen={() => setSelectedDrink(drink)} />
+                        ))
+                }
+            </div>
+            <DrinkDetails
+                drink={drinks.find(d => d.drinkId === selectedDrink?.drinkId) || selectedDrink}
+                open={!!selectedDrink}
+                close={() => setSelectedDrink(null)}
+            />
+
+        </Protect>
     )
 }
