@@ -14,8 +14,8 @@ export default function PasswordInput({ field, form, placeholder }: Input) {
     const [passwordInputType, setPasswordInputType] = useState<'password' | 'text'>('password');
     const error = form.touched[field.name] && form.errors[field.name];
 
-    const inputClasses = classNames('block w-full bg-neutral-100 text-sm p-[10px] active:outline focus:outline placeholder:text-neutral-500', {
-        'outline-neutral-600': !error,
+    const inputClasses = classNames('block w-full bg-[#2a2a32] text-neutral-50 text-sm p-[10px] active:outline focus:outline placeholder:text-neutral-500 border border-neutral-700', {
+        'outline-neutral-500 active:border-neutral-500 focus:border-neutral-500': !error,
         'outline-red border border-red': error
     });
 
@@ -30,14 +30,14 @@ export default function PasswordInput({ field, form, placeholder }: Input) {
               {
                 passwordInputType === 'password' ? (
                     <FiEye
-                        className='absolute cursor-pointer'
+                        className='absolute cursor-pointer text-neutral-400'
                         size={18}
                         style={{ top: 12, right: 10 }}
                         onClick={() => setPasswordInputType('text')}
                     />
                 ) : (
                     <FiEyeOff
-                        className='absolute cursor-pointer'
+                        className='absolute cursor-pointer text-neutral-400'
                         size={18}
                         style={{ top: 12, right: 10 }}
                         onClick={() => setPasswordInputType('password')}
