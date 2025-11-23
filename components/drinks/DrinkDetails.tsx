@@ -78,7 +78,7 @@ export default function DrinkDetails({ drink, open, close }: DrinkDetails) {
             closable={false}
             onClose={close}
             open={open}
-            height="95vh"
+            height="85vh"
             styles={{
                 header: {
                     background: 'linear-gradient(274deg, #24242c 0%, rgba(32, 35, 40, 1) 100%)',
