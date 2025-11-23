@@ -2,10 +2,9 @@
 import api from '@/utils/api'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { User } from 'firebase/auth';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import {Setting} from '@/redux/slices/settings.slice';
+import { User } from 'firebase/auth'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store'
 
 export interface UserState {
   isAuthenticated: boolean

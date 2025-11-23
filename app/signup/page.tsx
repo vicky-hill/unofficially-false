@@ -3,11 +3,17 @@
 import * as Yup from 'yup'
 import { Formik, Form } from 'formik'
 import FormikInput from '@/components/form/FormikInput'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/utils/firebase'
 import api from '@/utils/api'
 import Link from 'next/link'
 import { Button } from 'antd'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@/redux/store'
+import { checkUserSession } from '@/redux/slices/user.slice'
+
 
 const validation = Yup.object().shape({
     email: Yup.string().required(),
@@ -25,6 +31,19 @@ const initialValues: Values = {
 };
 
 export default function Signup({ }) {
+    const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                router.push('/drinks');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [router]);
+
     const onSubmit = async (values: Values, { setSubmitting, resetForm }: any) => {
         try {
             setSubmitting(true);
@@ -32,13 +51,17 @@ export default function Signup({ }) {
             const { email, password } = values;
             const { user }: any = await createUserWithEmailAndPassword(auth, email, password);
 
-            const createdUser = await api.post('/users', {
+            await api.post('/users', {
                 userId: user.uid,
                 email
             });
 
             localStorage.setItem('token', user.accessToken);
- 
+
+            router.push('/drinks');
+
+            dispatch(checkUserSession(user));
+
             resetForm();
             setSubmitting(false);
         } catch (err) {
