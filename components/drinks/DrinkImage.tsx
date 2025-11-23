@@ -17,9 +17,9 @@ export default function DrinkImage({ image }: DrinkImage) {
 
         const smallImages = ['00211'];
 
-        if (smallImages.includes(imageId)) {
-            return 'h-8'
-        }
+        // if (smallImages.includes(imageId)) {
+        //     return 'h-8'
+        // }
 
         return 'h-16'
     }
