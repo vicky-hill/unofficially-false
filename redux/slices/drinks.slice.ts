@@ -39,7 +39,7 @@ export const selectFilteredDrinks = createSelector(
         }
 
         if (filter === 'secretMenu') {
-            filteredDrinks = filteredDrinks.filter(drink => drink.current && !drink.onMenu)
+            filteredDrinks = filteredDrinks.filter(drink => drink.current && !drink.onMenu && drink.type !== 'bowl')
         } else if (filter === 'happyHour') {
             filteredDrinks = filteredDrinks.filter(drink => drink.happyHour)
         } else if (filter === 'bowl') {

@@ -4,6 +4,8 @@ import { User } from '@/types/user.types'
 import api from '@/utils/api'
 import { useEffect, useState } from 'react'
 import { Switch } from 'antd'
+import { IoMdSettings } from 'react-icons/io'
+import Link from 'next/link'
 
 export default function page() {
     const [currentUser, setCurrentUser] = useState<any>(null);
@@ -30,8 +32,8 @@ export default function page() {
     const onChange = async (userId: string, verified: boolean) => {
         try {
             const updatedUser: User = await api.put(`/users/${userId}`, { verified });
-            setUsers(users => users.map(user => user.userId === userId ? updatedUser : user ));
-        } catch(err) {
+            setUsers(users => users.map(user => user.userId === userId ? updatedUser : user));
+        } catch (err) {
             console.log(err);
         }
     }
@@ -39,7 +41,12 @@ export default function page() {
     if (!currentUser?.isAdmin) return null;
 
     return (
-        <div className='flex h-[80vh] flex-col justify-center items-center gap-5'>
+        <div className='flex h-[80vh] flex-col justify-center items-center gap-5 relative'>
+            <Link href='/settings'>
+                <IoMdSettings size={20} color="white" className='absolute top-7 right-9' />
+            </Link>
+
+
             <p className='text-neutral-50 text-2xl font-bold mb-5'>Users</p>
             <div className='w-full px-12 space-y-4'>
                 {
@@ -51,7 +58,6 @@ export default function page() {
                     ))
                 }
             </div>
-
         </div>
     )
 }

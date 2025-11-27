@@ -18,11 +18,12 @@ export default function DrinkItem({ drink, onOpen }: DrinkProps) {
                 <div className='flex justify-center items-center gap-0 relative'>
                     <DrinkImage image={drink.image} />
                     <div className={`relative z-10 ${!imagesOn || !drink.image ? 'pl-3' : ''}`}>
-                        <p className='font-bold mb-1'>{drink.name}</p>
+                        {/* <p className='font-bold mb-1'>{drink.name}</p> */}
+                        <p className='font-bold mb-1'>{drink.name} {drink.image ? drink.image.split('-')[2] : ''}</p>
                         <p className='text-sm text-neutral-300'>{`$${drink.price}.00`}</p>
                     </div>
                 </div>
-                <PiCheers size={20} color='#fff' />
+                {/* <PiCheers size={20} color='#fff' /> */}
         </div>
     )
 }
