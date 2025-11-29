@@ -12,8 +12,6 @@ export default function Home() {
     router.push('/drinks')
   }, [])
 
-  router.push('/drinks')
-
   return (
     <Protect>
       <div></div>
