@@ -35,7 +35,7 @@ export default function page() {
 
     return (
         <Protect>
-            <div className='flex flex-col h-[95vh] items-center overflow-scroll gap-3 mt-5 px-4'>
+            <div className='flex flex-col h-[95vh] items-center overflow-scroll gap-3 mt-5 px-4 mb-10'>
                 {logoOn && <Image src={logo} alt='logo' className='mb-5 w-1/2' />}
 
                 <div className={`relative w-full ${!logoOn ? 'mt-5' : ''}`}>
