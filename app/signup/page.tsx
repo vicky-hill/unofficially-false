@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@/redux/store'
-import { checkUserSession } from '@/redux/slices/user.slice'
+import {checkUserSession, useCurrentUser} from '@/redux/slices/user.slice';
 
 
 const validation = Yup.object().shape({
@@ -33,16 +33,21 @@ const initialValues: Values = {
 export default function Signup({ }) {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
+   const { isAuthenticated } = useCurrentUser();
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                router.push('/drinks');
-            }
+        const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+            await dispatch(checkUserSession(user));
         });
 
-        return () => unsubscribe();
-    }, [router]);
+        return unsubscribeAuth;
+    }, [])
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/drinks')
+        }
+    }, [isAuthenticated])
 
     const onSubmit = async (values: Values, { setSubmitting, resetForm }: any) => {
         try {

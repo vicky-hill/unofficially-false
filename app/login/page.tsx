@@ -3,11 +3,15 @@
 import * as Yup from 'yup'
 import { Formik, Form } from 'formik'
 import FormikInput from '@/components/form/FormikInput'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/utils/firebase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from 'antd'
+import { useEffect } from 'react'
+import { checkUserSession, useCurrentUser } from '@/redux/slices/user.slice';
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@/redux/store'
 
 const validation = Yup.object().shape({
     email: Yup.string().required(),
@@ -26,6 +30,22 @@ const initialValues: Values = {
 
 export default function Login({ }) {
     const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
+    const { isAuthenticated } = useCurrentUser();
+
+    useEffect(() => {
+        const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+            await dispatch(checkUserSession(user));
+        });
+
+        return unsubscribeAuth;
+    }, [])
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/drinks')
+        }
+    }, [isAuthenticated])
 
     const onSubmit = async (values: Values, { setSubmitting, resetForm }: any) => {
         try {
@@ -63,7 +83,7 @@ export default function Login({ }) {
                     </Form>
                 )}
             </Formik>
-            
+
             <p className='text-neutral-400 text-sm mt-4'>
                 Don't have an account? <Link href='/signup' className='text-neutral-50 hover:text-neutral-200'>Sign up</Link>
             </p>
