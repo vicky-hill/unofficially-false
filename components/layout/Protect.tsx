@@ -25,6 +25,7 @@ export default function Protect({ children }: ProtectProps) {
         let settingsInterval: NodeJS.Timeout | null = null;
 
         const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+            if (!user) router.push('/signup');
             await dispatch(checkUserSession(user));
         });
 
@@ -71,12 +72,6 @@ export default function Protect({ children }: ProtectProps) {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         }
     }, [])
-
-    useEffect(() => {
-        if (!isAuthenticated && !loading) {
-            router.push('/signup');
-        }
-    }, [isAuthenticated, !loading])
 
     if (!isAuthenticated && loading) return (
         <div className='flex h-[90vh] justify-center items-center'>
