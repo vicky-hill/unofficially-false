@@ -4,6 +4,7 @@ import { getSettings } from '@/redux/slices/settings.slice'
 import { checkUserSession, getCurrentUser, useCurrentUser } from '@/redux/slices/user.slice'
 import { AppDispatch } from '@/redux/store'
 import { auth } from '@/utils/firebase'
+import { Spin } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -70,7 +71,7 @@ export default function Protect({ children }: ProtectProps) {
 
     if (!isAuthenticated && loading) return (
         <div className='flex h-[90vh] justify-center items-center'>
-
+            <Spin />
         </div>
     )
 
