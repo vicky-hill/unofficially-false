@@ -75,7 +75,7 @@ export default function Protect({ children }: ProtectProps) {
 
     if (!isAuthenticated && loading) return (
         <div className='flex h-[90vh] justify-center items-center'>
-            <Spin />
+            
         </div>
     )
 

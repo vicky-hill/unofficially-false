@@ -74,7 +74,7 @@ export default function FormikInput({ border, name = '', label, noLabel, require
 
     const hasError = (name && touched && name in touched && errors && name in errors) || error || isNestedError();
 
-    const inputClasses = classNames(className + ' peer block block w-full bg-[#2a2a32] text-neutral-50 text-sm p-[10px] placeholder:text-neutral-500', {
+    const inputClasses = classNames(className + ' peer block block w-full bg-[#2a2a32] text-neutral-50 p-[10px] placeholder:text-neutral-500', {
         [defaultClasses]: !border && !hasError && !disabled,
         [noBorder]: border === 'none' && !hasError && !disabled,
         [errorClasses]: hasError,
