@@ -1,16 +1,39 @@
 'use client'
 
 import { Setting } from '@/redux/slices/settings.slice'
-import { Switch } from 'antd'
+import { Switch, Button } from 'antd'
 import Link from 'next/link'
 import { HiUsers } from 'react-icons/hi'
 import Protect from '@/components/layout/Protect'
 import { useState, useEffect } from 'react'
 import api from '@/utils/api'
+import * as Yup from 'yup'
+import { Formik, Form } from 'formik'
+import FormikInput from '@/components/form/FormikInput'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@/redux/store'
+import { addDrink } from '@/redux/slices/drinks.slice'
+
+const validation = Yup.object().shape({
+    name: Yup.string().required(),
+    price: Yup.number().required()
+});
+
+interface DrinkValues {
+    name: string;
+    price: string;
+}
+
+const initialValues: DrinkValues = {
+    name: '',
+    price: ''
+};
 
 export default function page() {
     const [currentUser, setCurrentUser] = useState<any>(null);
     const [settings, setSettings] = useState<any>(null);
+
+    const dispatch = useDispatch<AppDispatch>()
 
     useEffect(() => {
         getCurrentUser();
@@ -53,6 +76,20 @@ export default function page() {
         }
     }
 
+    const onSubmit = async (values: DrinkValues, { setSubmitting, resetForm }: any) => {
+        try {
+            setSubmitting(true);
+
+            dispatch(addDrink(values));
+            
+            resetForm();
+            setSubmitting(false);
+        } catch (err) {
+            console.log('Error submitting form:', err);
+            setSubmitting(false);
+        }
+    }
+
     if (!currentUser?.isAdmin || !settings) return null;
 
     return (
@@ -76,6 +113,23 @@ export default function page() {
                         <Switch value={settings.logoOn} className='w-3' onChange={(e) => onChange('logo', e)} />
                         <p>Logo</p>
                     </div>
+                </div>
+
+                <p className='text-neutral-50 text-2xl font-bold mb-5 mt-10'>Add drink</p>
+                <div className='w-full px-12'>
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={onSubmit}
+                        validationSchema={validation}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form className="space-y-6">
+                                <FormikInput name="name" />
+                                <FormikInput name="price" type="number" />
+                                <Button htmlType='submit' className='w-full mt-5 bg-[#363642]! text-neutral-50! hover:bg-[#42424e]! border-[#42424e]!'>Add Drink</Button>
+                            </Form>
+                        )}
+                    </Formik>
                 </div>
             </div>
         </Protect>

@@ -1,8 +1,9 @@
-import { createSlice, createAsyncThunk, PayloadAction, createSelector } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction, createSelector, current } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { Drink } from '@/types/drink.types'
 import { api } from '@/utils/api'
+import { message } from 'antd'
 
 export type FilterType = null | 'secretMenu' | 'happyHour' | 'bowl';
 
@@ -32,7 +33,7 @@ export const selectFilteredDrinks = createSelector(
 
         if (search) {
             const searchLower = search.toLowerCase()
-            filteredDrinks = filteredDrinks.filter(drink => 
+            filteredDrinks = filteredDrinks.filter(drink =>
                 drink.name.toLowerCase().includes(searchLower) ||
                 drink.description?.toLowerCase().includes(searchLower)
             )
@@ -82,6 +83,17 @@ export const updateDrink = createAsyncThunk('drinks/updateDrink', async (data: D
     }
 })
 
+export const addDrink = createAsyncThunk('drinks/addDrink', async (data: { name: string, price: string }) => {
+    try {
+        const drink: Drink = await api.post('/drinks', { ...data, current: true, onMenu: true, type: 'cocktail'})
+        message.success('Drink added')
+        return drink;
+    } catch (err) {
+        console.error('Error fetching drinks:', err)
+        throw err
+    }
+})
+
 
 export const drinkSlice = createSlice({
     name: 'drinks',
@@ -109,6 +121,10 @@ export const drinkSlice = createSlice({
             })
             .addCase(updateDrink.fulfilled, (state, action) => {
                 state.drinks = state.drinks.map(drink => drink.drinkId === action.payload.drinkId ? action.payload : drink)
+                state.loading = false
+            })
+            .addCase(addDrink.fulfilled, (state, action) => {
+                state.drinks = [...state.drinks, action.payload]
                 state.loading = false
             })
             .addCase(getDrinks.rejected, (state) => {
