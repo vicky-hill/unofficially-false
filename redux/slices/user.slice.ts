@@ -23,7 +23,7 @@ const initialState: UserState = {
   name: null,
   verified: null,
   isAdmin: false,
-  loading: false
+  loading: true
 };
 
 export const useCurrentUser: any = () => useSelector((state: RootState) => state.currentUser);
@@ -72,12 +72,12 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(checkUserSession.fulfilled, (state: UserState, action: any) => {
-        state.isAuthenticated = true
-        state.userId = action.payload.userId
-        state.email = action.payload.email
-        state.name = action.payload.name
-        state.verified = action.payload.verified
-        state.isAdmin = action.payload.isAdmin
+        state.isAuthenticated = action.payload ? true : false
+        state.userId = action.payload?.userId
+        state.email = action.payload?.email
+        state.name = action.payload?.name
+        state.verified = action.payload?.verified
+        state.isAdmin = action.payload?.isAdmin
         state.loading = false
       })
       .addCase(getCurrentUser.fulfilled, (state: UserState, action: any) => {

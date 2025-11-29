@@ -6,6 +6,7 @@ import { AppDispatch } from '@/redux/store'
 import { auth } from '@/utils/firebase'
 import { Spin } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -16,6 +17,8 @@ interface ProtectProps {
 export default function Protect({ children }: ProtectProps) {
     const dispatch = useDispatch<AppDispatch>();
     const { isAuthenticated, verified, loading } = useCurrentUser();
+
+    const router = useRouter();
 
     useEffect(() => {
         let unsubscribe: any;
@@ -69,9 +72,15 @@ export default function Protect({ children }: ProtectProps) {
         }
     }, [])
 
+    useEffect(() => {
+        if (!isAuthenticated && !loading) {
+            router.push('/signup');
+        }
+    }, [isAuthenticated, !loading])
+
     if (!isAuthenticated && loading) return (
         <div className='flex h-[90vh] justify-center items-center'>
-            <span className='white'>Not Authenticated</span>
+            <Spin />
         </div>
     )
 
