@@ -15,17 +15,19 @@ import DrinkDetails from '@/components/drinks/DrinkDetails'
 import { Drink } from '@/types/drink.types'
 import { useAppDispatch } from '@/redux/hooks'
 import { clearFilters, getDrinks, setFilter, setSearch, useDrinks } from '@/redux/slices/drinks.slice'
+import { useCurrentUser } from '@/redux/slices/user.slice'
 
 export default function page() {
     const dispatch = useAppDispatch()
     const { filteredDrinks, search, filter, drinks } = useDrinks()
+    const { isAuthenticated } = useCurrentUser();
 
     const { logoOn } = useSettings();
     const [selectedDrink, setSelectedDrink] = useState<Drink | null>(null);
 
     useEffect(() => {
-        dispatch(getDrinks())
-    }, [])
+       isAuthenticated && dispatch(getDrinks())
+    }, [isAuthenticated])
 
     const handleFilter = (value: 'secretMenu' | 'bowl' | 'happyHour') => {
         filter === value ? dispatch(clearFilters()) : dispatch(setFilter(value))
@@ -67,7 +69,6 @@ export default function page() {
                 open={!!selectedDrink}
                 close={() => setSelectedDrink(null)}
             />
-
         </Protect>
     )
 }
