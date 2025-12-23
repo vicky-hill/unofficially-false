@@ -22,7 +22,8 @@ export default function RootLayout({ children }: any) {
     <html lang="en">
       <body className={`${figtree.variable} antialiased page-gradient`}>
         <ReduxProvider>
-          {children}
+          {/* {children} */}
+          <div className='flex justify-center text-white text-2xl mt-52'>Closed for now</div>
         </ReduxProvider>
       </body>
     </html>
