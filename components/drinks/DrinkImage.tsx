@@ -7,7 +7,7 @@ interface DrinkImage {
     image?: string | null
 }
 
-const square = 'https://ik.imagekit.io/minite/falseidol/square.png'
+const square = 'https://ik.imagekit.io/minite/official/square.png?updatedAt=1762648366754'
 
 export default function DrinkImage({ image }: DrinkImage) {
     const { imagesOn } = useSettings();
