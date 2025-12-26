@@ -64,9 +64,11 @@ export const settingslice = createSlice({
             })
             .addCase(getSettings.fulfilled, (state: any, action: any) => {
                 state.loading = false
-                state.imagesOn = action.payload.find((setting: Setting) => setting.name === 'images').active
-                state.logoOn = action.payload.find((setting: Setting) => setting.name === 'logo').active
-                state.descriptionOn = action.payload.find((setting: Setting) => setting.name === 'description').active
+                if (action.payload) {
+                    state.imagesOn = action.payload.find((setting: Setting) => setting.name === 'images').active
+                    state.logoOn = action.payload.find((setting: Setting) => setting.name === 'logo').active
+                    state.descriptionOn = action.payload.find((setting: Setting) => setting.name === 'description').active
+                }
             })
             .addCase(createSettings.fulfilled, (state: any, action: any) => {
                 state.settings = [...state.settings, action.payload]
