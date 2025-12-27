@@ -16,6 +16,8 @@ import { Drink } from '@/types/drink.types'
 import { useAppDispatch } from '@/redux/hooks'
 import { clearFilters, getDrinks, setFilter, setSearch, useDrinks } from '@/redux/slices/drinks.slice'
 import { useCurrentUser } from '@/redux/slices/user.slice'
+import { TbChristmasTree } from "react-icons/tb";
+
 
 export default function page() {
     const dispatch = useAppDispatch()
@@ -51,9 +53,13 @@ export default function page() {
                         <GiFlamer color={filter === 'bowl' ? '#fafafa' : '#737373'} size={16} />
                         <span className='w-max'>Bowls</span>
                     </div>
-                    <div onClick={() => handleFilter('happyHour')} className={`flex items-center justify-center-center ${filter === 'happyHour' ? 'text-neutral-50' : 'text-neutral-500'} transition-all text-sm gap-1.5 font-bold px-3 mb-3 w-min`}>
+                    {/* <div onClick={() => handleFilter('happyHour')} className={`flex items-center justify-center-center ${filter === 'happyHour' ? 'text-neutral-50' : 'text-neutral-500'} transition-all text-sm gap-1.5 font-bold px-3 mb-3 w-min`}>
                         <FaCocktail color={filter === 'happyHour' ? '#fafafa' : '#737373'} size={16} />
                         <span className='w-max'>Happy Hour</span>
+                    </div> */}
+                    <div onClick={() => handleFilter('happyHour')} className={`flex items-center justify-center-center ${filter === 'happyHour' ? 'text-neutral-50' : 'text-neutral-500'} transition-all text-sm gap-1.5 font-bold px-3 mb-3 w-min`}>
+                        <TbChristmasTree color={filter === 'happyHour' ? '#fafafa' : '#737373'} size={16} />
+                        <span className='w-max'>Christmas</span>
                     </div>
                 </div>
 
