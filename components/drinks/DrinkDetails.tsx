@@ -96,7 +96,7 @@ export default function DrinkDetails({ drink, open, close }: DrinkDetails) {
                     <div className='relative flex flex-col gap-3 mx-3'>
                         <div className='flex gap-3 min-h-8'>
                             <DrinkImage image={drink.image} />
-                            {descriptionOn && <p className='text-sm relative z-0'>{drink.description}</p>}
+                            {descriptionOn && <p className={`${!drink.image ? 'pl-16' : '' } text-sm relative z-0`}>{drink.description}</p>}
                         </div>
                         {
                             isAdmin && (
